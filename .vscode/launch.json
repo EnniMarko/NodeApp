@@ -2,19 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "node-terminal",
+            "name": "Run Nodemon",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/app.js"
+            "command": "nodemon app.js ",
+            "cwd": "${workspaceFolder}"
         },
         {
             "type": "node-terminal",
-            "name": "Run",
+            "name": "Run argument",
             "request": "launch",
-            "command": "nodemon app.js",
+            "command": "node app.js add",
             "cwd": "${workspaceFolder}"
         }
     ]
