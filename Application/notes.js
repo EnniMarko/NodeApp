@@ -1,22 +1,53 @@
 const fs = require('fs');
+const relPath = './AppData/nodesData.json';
 
 var addNote = (title, body) => {
     console.log('Adding note', title, body);
-    var notes = [];
     var note = {
-    title,
-    body
+        title,
+        body
     };
-    notes.push(note);
+    let notes = fetchNotes();
+    let duplicateNotes = notes.filter((note) => note.title === title);
+    if (duplicateNotes.length === 0) {
+        notes.push(note);
+        saveNotes(notes);
+        return note;
+    }
 };
 
-var getAll = () => {
-    console.log('Getting all notes');
+var saveNotes = (notes) => {
+    fs.writeFileSync(relPath, JSON.stringify(notes));
 };
+
+var fetchNotes = () => {
+    try {
+        return JSON.parse(fs.readFileSync(relPath));
+    }
+    catch (e) {
+        console.log(e.message)
+        return [];
+    }
+};
+
 var getNote = (title) => {
     console.log(`Getting note by title:\"${title}\"`)
+    let notes = fetchNotes();
+    let filteredNotes = notes.filter((note) => note.title === title);
+    if (filteredNotes.length > 1) { throw "The title of the note is not unique in storage" }
+    return filteredNotes[0];
 }
+
 var removeNote = (title) => {
-    console.log('Removing note by title', title);
-    };
-module.exports = { addNote, getAll, getNote, removeNote}
+    let notes = fetchNotes();
+    let filteredNotes = notes.filter((note) => note.title !== title);
+    saveNotes(filteredNotes);
+    return notes.length !== filteredNotes.length;
+};
+
+var logNote = (note) => {
+    console.log('--');
+    console.log(`Title: ${note.title}`);
+    console.log(`Body: ${note.body}`);
+};
+module.exports = { addNote, getAll: fetchNotes, getNote, removeNote, logNote}

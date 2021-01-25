@@ -12,7 +12,7 @@
             "type": "node-terminal",
             "name": "Run argument",
             "request": "launch",
-            "command": "node app.js add",
+            "command": "node app.js list",
             "cwd": "${workspaceFolder}"
         }
     ]
